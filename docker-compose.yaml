@@ -1,0 +1,19 @@
+version: "3"
+services:
+  graphql:
+    container_name: project-github-api-playaround
+    build: "."
+    command: >
+      npx nodemon   # For debug mode
+    ports:
+      - "4000:4000"
+    # environment:
+    #  - ENV variables can be listed here
+    volumes:
+      - ./src/:/github/src
+      - ./config/:/github/config
+
+networks:
+  default:
+    external:
+      name: project-github-api-playaround-network
