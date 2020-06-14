@@ -1,0 +1,19 @@
+{
+  "name": "github-api-playaround",
+  "version": "1.0.0",
+  "description": " Take the GitHub public API (v4, GraphQL) and see what fun and entertaining applications we can build!",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/redouane-dev/github-api-playaround.git"
+  },
+  "author": "Redouane Achouri",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/redouane-dev/github-api-playaround/issues"
+  },
+  "homepage": "https://github.com/redouane-dev/github-api-playaround#readme"
+}
