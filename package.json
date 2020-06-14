@@ -2,8 +2,9 @@
   "name": "github-api-playaround",
   "version": "1.0.0",
   "description": " Take the GitHub public API (v4, GraphQL) and see what fun and entertaining applications we can build!",
-  "main": "index.js",
+  "main": "src/index.js",
   "scripts": {
+    "start": "node src/index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
@@ -15,5 +16,13 @@
   "bugs": {
     "url": "https://github.com/redouane-dev/github-api-playaround/issues"
   },
-  "homepage": "https://github.com/redouane-dev/github-api-playaround#readme"
+  "homepage": "https://github.com/redouane-dev/github-api-playaround#readme",
+  "dependencies": {
+    "apollo-server-express": "^2.14.4",
+    "express": "^4.17.1",
+    "graphql-playground-middleware-express": "^1.7.18"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.4"
+  }
 }

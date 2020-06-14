@@ -1,0 +1,8 @@
+{
+    "default": {
+        "port": 4000
+    },
+    "github-api": {
+        "url": "https://api.github.com/graphql"
+    }
+}
