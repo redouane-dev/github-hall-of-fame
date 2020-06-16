@@ -12,7 +12,6 @@ services:
     volumes:
       - ./src/:/github/src
       - ./config/:/github/config
-
 networks:
   default:
     external:
