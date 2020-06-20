@@ -35,6 +35,21 @@ services:
       options:
         max-size: "200k"
         max-file: "10"
+
+  grafana:
+    container_name: twittersentimentanalysis_grafana
+    image: grafana/grafana:7.0.3
+    restart: on-failure
+    ports:
+      - "80:3000"
+    volumes:
+      - ./persistence/grafana:/var/lib/grafana
+    environment:
+      - "GF_INSTALL_PLUGINS=grafana-piechart-panel"
+      - "GF_AUTH_ANONYMOUS_ENABLED=true"
+      - "GF_AUTH_ANONYMOUS_org_name=Main Org."
+      - "GF_AUTH_ANONYMOUS_org_role=Admin"
+
 networks:
   default:
     external:
