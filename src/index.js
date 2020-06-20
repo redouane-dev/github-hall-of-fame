@@ -13,8 +13,9 @@ const PORT = config['default']['port'] || 4000;
 
 //
 let d = new DataFetcher(
-    config['github-api']['url'],
-    secret['github-api']['token']
+    uri = config['github-api']['url'],
+    token = secret['github-api']['token'],
+    databaseConfig = config['database']
 );
 
 try {

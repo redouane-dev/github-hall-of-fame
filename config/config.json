@@ -4,5 +4,13 @@
     },
     "github-api": {
         "url": "https://api.github.com/graphql"
+    },
+    "database": {
+        "host": "influxdb",
+        "port": 8086,
+        "name": "github",
+        "measurement": "repositories",
+        "username": "root",
+        "password": "root"
     }
 }

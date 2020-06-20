@@ -1,10 +1,12 @@
 version: "3"
+
 services:
   graphql:
     container_name: project-github-api-playaround
     build: "."
+    restart: on-failure
     command: >
-      npx nodemon   # For debug mode
+      npx nodemon  # For debug mode
     ports:
       - "4000:4000"
     # environment:
@@ -12,6 +14,27 @@ services:
     volumes:
       - ./src/:/github/src
       - ./config/:/github/config
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "200k"
+        max-file: "10"
+
+  influxdb:
+    container_name: project-github-api-playaround-influxdb
+    image: influxdb:1.8.0
+    restart: on-failure
+    expose:
+      - "8086"
+    volumes:
+      - ./persistence/influxdb:/var/lib/influxdb
+    environment:
+      - "INFLUXDB_GRAPHITE_ENABLED=false"
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "200k"
+        max-file: "10"
 networks:
   default:
     external:
