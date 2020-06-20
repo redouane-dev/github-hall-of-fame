@@ -25,7 +25,7 @@ try {
 
     setInterval(
         () => d.query('is:public stars:>1000', 100),
-        1000
+        config['default']['interval-mn'] * 60 * 1000    // Milliseconds
     );
 
 } catch (error) {

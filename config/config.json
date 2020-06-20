@@ -1,6 +1,7 @@
 {
     "default": {
-        "port": 4000
+        "port": 4000,
+        "interval-mn": 15
     },
     "github-api": {
         "url": "https://api.github.com/graphql"
