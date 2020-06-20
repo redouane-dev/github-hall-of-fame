@@ -1,14 +1,14 @@
 version: "3"
 
 services:
-  graphql:
+  server:
     container_name: project-github-api-playaround
     build: "."
     restart: on-failure
     command: >
       npx nodemon  # For debug mode
     ports:
-      - "4000:4000"
+      - "80:4000"
     # environment:
     #  - ENV variables can be listed here
     volumes:
@@ -37,11 +37,11 @@ services:
         max-file: "10"
 
   grafana:
-    container_name: twittersentimentanalysis_grafana
+    container_name: project-github-api-playaround-grafana
     image: grafana/grafana:7.0.3
     restart: on-failure
     ports:
-      - "80:3000"
+      - "3000:3000"
     volumes:
       - ./persistence/grafana:/var/lib/grafana
     environment:
