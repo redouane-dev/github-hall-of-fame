@@ -1,45 +1,35 @@
-"use strict"
+'use strict';
 
-const fetch = require('node-fetch');
-const express = require("express");
-const expressPlayground = require("graphql-playground-middleware-express").default;
-const { InMemoryCache } = require("apollo-cache-inmemory");
-const { HttpLink } = require("apollo-link-http");
-const { ApolloClient, gql } = require("apollo-boost");
+const express = require('express');
+const expressPlayground = require('graphql-playground-middleware-express').default;
 
+const DataFetcher = require ('./dataFetcher');
 
 // Load configuration
 const config = require('../config/config')
 const secret = require('../config/secret')
 
-const PORT = config['default']['port'] || 4000
+const PORT = config['default']['port'] || 4000;
 
 //
-const httpLink = new HttpLink({
-    uri: config['github-api']['url'],
-    fetch: fetch,
-    headers: {
-        'Authorization': `Bearer ${secret['github-api']['token']}`
-    }
-});
+let d = new DataFetcher(
+    config['github-api']['url'],
+    secret['github-api']['token']
+);
 
-const client = new ApolloClient({
-    link: httpLink,
-    cache: new InMemoryCache(),
-});
+try {
+    // d.query('is:public stars:>1000', 10);
+    // d.paginatedQuery('is:public stars:>1000', 10, 1);
 
-client
-    .query({
-        query: gql`
-query { 
-  viewer { 
-    login
-  }
+
+    setInterval(
+        () => d.query('is:public stars:>1000', 100),
+        1000
+    );
+
+} catch (error) {
+    console.error(error);   
 }
-        `
-    })
-    .then(result => console.log(JSON.stringify(result, null, 4)))
-    .catch(error => console.log(JSON.stringify(error, null, 4)));
 
 
 const app = express()
@@ -48,7 +38,7 @@ app.get(
     expressPlayground({
         endpoint: config['github-api']['url'],
         headers: {
-            "Authorization": `Bearer ${secret['github-api']['token']}`
+            'Authorization': `Bearer ${secret['github-api']['token']}`
         }
     }),
 )
