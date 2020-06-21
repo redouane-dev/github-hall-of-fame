@@ -33,7 +33,12 @@ try {
 }
 
 
-const app = express()
+const app = express();
+
+// Redirect to Grafana dashboard
+// app.get('/', (req, res) => res.redirect('http://localhost:3000'));
+
+// Start GraphQL Playground
 app.get(
     '/playground',
     expressPlayground({
