@@ -7,14 +7,8 @@ services:
     restart: on-failure
     command: >
       npx nodemon  # For debug mode
-    expose:
-      - "4000"
-    environment:
-      # Nginx Reverse Proxy configuration (SSL Encryption)
-      - "VIRTUAL_PORT=4000"
-      - "VIRTUAL_HOST=<subdomain.domain.tld>"
-      - "LETSENCRYPT_HOST=<subdomain.domain.tld>"
-      # - "LETSENCRYPT_EMAIL=<mail@yourdomain.tld>"   # optional
+    ports:
+      - "4000:4000"
     volumes:
       - ./src/:/github/src
       - ./config/:/github/config

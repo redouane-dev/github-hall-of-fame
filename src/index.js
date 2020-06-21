@@ -36,7 +36,7 @@ try {
 const app = express();
 
 // Redirect to Grafana dashboard
-// app.get('/', (req, res) => res.redirect('http://localhost:3000'));
+// app.get('/', (req, res) => res.redirect(req.headers.host + ':3000'));
 
 // Start GraphQL Playground
 app.get(

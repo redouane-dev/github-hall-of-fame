@@ -28,8 +28,8 @@ services:
       - /var/run/docker.sock:/var/run/docker.sock:ro
     volumes_from:
       - nginx-proxy
-    environment:
-      # - "DEFAULT_EMAIL=<mail@yourdomain.tld>"   # optional
+    # environment:
+    #   - "DEFAULT_EMAIL=<mail@yourdomain.tld>"   # optional
     logging:
       driver: "json-file"
       options:
