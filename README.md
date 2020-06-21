@@ -1,33 +1,38 @@
 # github-hall-of-fame
 Dashboard to monitor the ranking of the GitHub most popular languages and users.
 
+Dashboard available at [futurice.redouaneachouri.com](https://futurice.redouaneachouri.com/d/w_AGnSZGk/github-hall-of-fame?orgId=1&from=now-24h&to=now).
+
 
 ## Introduction
 
-GitHub provides us with two API versions: [the version 3 RESTful API](https://developer.github.com/v3/), and [the version 4 that implements the GraphQL](https://developer.github.com/v4/) query language.
+GitHub provides us with two API versions: [the version 3 RESTful API](https://developer.github.com/v3/), and [the version 4 implementing the GraphQL](https://developer.github.com/v4/) query language.
 
-In this project, we'll be using the v4 GraphQL API to periodically fetch the 100 most popular projects on GitHub in terms of stars count, we'll then store this data in a time-series database, and aggregate it on a dashboard to follow the evolution over time of the most popular languages by star counts, the most popular users, and the users with most forks across their repositories.
+In this project, we'll be using the v4 GraphQL API to periodically fetch the 100 most popular projects on GitHub in terms of stars count, we'll then store this data in a time-series database, and aggregate it on a dashboard to follow the evolution over time of:
+- The most popular languages by stars count
+- The most popular users
+- The users with most forks across their repositories.
 
 
-### Quick Access Links
+#### Quick Access Links
 - Dashboard: [futurice.redouaneachouri.com](https://futurice.redouaneachouri.com/d/w_AGnSZGk/github-hall-of-fame?orgId=1&from=now-24h&to=now)
 
-### Tech Stack
+#### Tech Stack
 - Development: Docker, Node.js, Express, GraphQL Client, GraphQL Playground, InfluxDB, Grafana.
 - Deployment: Compute Engine VM on Google Cloud Platform.
 
-### Why use the GraphQL API instead of the REST API?
+#### Why use the GraphQL API instead of the REST API?
 
 Although a REST client is easier to setup, GraphQL offers certain advantages:
 
-- All data obtained in one request, and from one endpoint.
+- All data obtained in one query, and from one endpoint.
 - Reduce the network traffic, which leads to a lower cloud provider bill at the end of the month.
 - Project is future-proof, as the v3 REST API will be discontinued in the future.
 
 
 ## Architecture
 
-Basic micro-services architecture that encapsulate each each part of the pipe in a Docker container. All services are described in a docker-compose file ([local](./docker-compose.local.yaml), [live](./docker-compose.live.yaml)).
+Basic micro-services architecture that encapsulates each part of the pipe in a Docker container. All services are described in a docker-compose file ([local](./docker-compose.local.yaml), [live](./docker-compose.live.yaml)).
 
 These services are:
 - Express server: Connects to the GraphQL API using the [Apollo Client](https://www.apollographql.com/docs/react/), and serves the [GraphQL Playground](https://github.com/prisma-labs/graphql-playground) for testing queries in the scope provided by your API token.
@@ -36,33 +41,34 @@ These services are:
 ![Architecture diagram](docs/diagram/github-hall-of-fame-diagram.png)
 
 
-### Important configuration notes
+#### Important configuration notes
 
-The configuration for this project is set in file [config/config.json](./config/config.json), and main configuration elements are:
+The configuration for this project is set in the file [config/config.json](./config/config.json), and main configuration elements are:
 
 - GitHub GraphQL API URL `github-api.url` set to https://api.github.com/graphql.
 - Data fetching period `default.interval-mn` set to **15 minutes**.
+- Pagination page size `default.pagination-page-size` set to 100, which the limit authorized by the GitHub API.
 
 
 ## Methodology, or a step-by-step description of the development process
 
 0. **Poke around in the Playground provided by GitHub**: Login and start playing around at [this link](https://developer.github.com/v4/explorer/).
 
-1. **Get Access Token**: GitHub can provide users with access tokens with a specific scope for their projects to access its APIs. We'll generate a token with a limited read-only scope. Good to know: Tokens unused in a 1-year period are automatically removed.
+1. **Get Access Token**: GitHub can provide users with access tokens with a specific scope for their projects to access its APIs. We generate a token with a limited read-only scope. Good to know: Tokens unused in a 1-year period are automatically removed.
 
-2. **Setup a development playground for testing queries under the scope of the API token obtained above**: [[Branch feature/add-graphql-playground](https://github.com/redouane-dev/github-hall-of-fame/tree/feature/add-graphql-playground)] We use the [Express Middleware provided by Prisma Labs](https://github.com/prisma-labs/graphql-playground/tree/master/packages/graphql-playground-middleware-express) and link it to the endpoint `/playground` of our Express server.
+2. **Setup a development playground for testing queries**: [Branch [feature/add-graphql-playground](https://github.com/redouane-dev/github-hall-of-fame/tree/feature/add-graphql-playground)] We use the [Express Middleware provided by Prisma Labs](https://github.com/prisma-labs/graphql-playground/tree/master/packages/graphql-playground-middleware-express) and link it to the endpoint `/playground` of our Express server.
 
-3. **Dockerize the Application**: [[Branch feature/docker-application](https://github.com/redouane-dev/github-hall-of-fame/tree/feature/dockerize-application)] Wrap services in a container for easy development, deployment, scaling, and maintenance.
+3. **Dockerize the Application**: [Branch [feature/docker-application](https://github.com/redouane-dev/github-hall-of-fame/tree/feature/dockerize-application)] Wrap services in a container for easy development, deployment, scaling, and maintenance.
 
-4. **Integrate GraphQL Client**: [[Branch feature/integrate-graphql-client](https://github.com/redouane-dev/github-hall-of-fame/tree/feature/integrate-graphql-client)] Wrap the [React client provided by Apollo](https://www.apollographql.com/docs/react/) in a class to connect and asynchronously fetch data from the GitHub GraphQL endpoint.
+4. **Integrate GraphQL Client**: [Branch [feature/integrate-graphql-client](https://github.com/redouane-dev/github-hall-of-fame/tree/feature/integrate-graphql-client)] Wrap the [React client provided by Apollo](https://www.apollographql.com/docs/react/) in a class to connect and asynchronously fetch data from the GitHub GraphQL endpoint.
 
-5. **Integrate InfluxDB**: [[Branch feature/integrate-influxdb](https://github.com/redouane-dev/github-hall-of-fame/tree/feature/integrate-influxdb-database)] Add the InfluxDB service and connect to it using the [node-influx](https://node-influx.github.io/) Node.js client.
+5. **Integrate InfluxDB**: [Branch [feature/integrate-influxdb](https://github.com/redouane-dev/github-hall-of-fame/tree/feature/integrate-influxdb-database)] Add the InfluxDB service and connect to it using the [node-influx](https://node-influx.github.io/) Node.js client.
 
-6. **Add Grafana service**: [[Branch feature/add-grafana-service](https://github.com/redouane-dev/github-hall-of-fame/tree/feature/add-grafana-service)] Grafana Labs provide an [official image that can be easily setup](https://grafana.com/docs/grafana/latest/installation/docker/).
+6. **Add Grafana service**: [Branch [feature/add-grafana-service](https://github.com/redouane-dev/github-hall-of-fame/tree/feature/add-grafana-service)] Grafana Labs provide an [official image that can be easily setup](https://grafana.com/docs/grafana/latest/installation/docker/).
 
-7. **Enjoy the dashboard** 😎: Once all services running, Grafana can be configured to connect to InfluxDB, and panels can be setup to display all sorts of aggregated data. For a quick setup with the same panels as the [dashboard above](https://futurice.redouaneachouri.com/d/w_AGnSZGk/github-hall-of-fame?orgId=1&from=now-24h&to=now), a pre-save dashboard model [github-hall-of-fame-dashboard.json](./docs/github-hall-of-fame-dashboard.json) can be imported from the Grafana homepage. (See instructions [here](https://grafana.com/docs/grafana/latest/reference/export_import/))
+7. **Enjoy the dashboard** 😎: Once all services running, Grafana can be configured to connect to InfluxDB, and panels can be setup to display all sorts of aggregated data. For a quick setup with the same panels as the [dashboard above](https://futurice.redouaneachouri.com/d/w_AGnSZGk/github-hall-of-fame?orgId=1&from=now-24h&to=now), a pre-saved dashboard model [github-hall-of-fame-dashboard.json](./docs/github-hall-of-fame-dashboard.json) can be imported from your local Grafana homepage. (See instructions [here](https://grafana.com/docs/grafana/latest/reference/export_import/))
 
-8. **Enable SSL Encryption (optional)**: [[Branch feature/add-reverse-proxy](https://github.com/redouane-dev/github-hall-of-fame/tree/feature/add-reverse-proxy)] We use Nginx as a reverse proxy to redirect requests on the GCP live server towards HTTPS, and assign free certificates from [Let's Encrypt](https://letsencrypt.org/).
+8. **Enable SSL Encryption (optional)**: [Branch [feature/add-reverse-proxy](https://github.com/redouane-dev/github-hall-of-fame/tree/feature/add-reverse-proxy)] We use Nginx as a reverse proxy to redirect requests on the GCP live server towards HTTPS, and assign free certificates from [Let's Encrypt](https://letsencrypt.org/).
 
 ## Deployment and testing
 
@@ -87,13 +93,15 @@ docker network create project-github-hall-of-fame-network
 docker-compose -f docker-compose.local.yaml up -d  # The -d for detached mode
 ```
 
+**Note**: Local version uses [Nodemon](https://www.npmjs.com/package/nodemon) to automatically restart the server in case of file change, so you won't need to manual perform a restart.
+
 You may see in the logs of the server a message saying:
 ```
 Error creating database 'github: Error: connect ECONNREFUSED 172.20.0.4:8086
 ```
-... which is normal since the server attempts a first connection to the InfluxDB service, but cannot find it since Influx takes some time to start. This will solve by itself as soon as the DB becomes available.
+... which is normal since the server attempts a first connection to the InfluxDB service, but cannot find it since Influx takes some time to start. This will resolve by itself as soon as the DB becomes available.
 
-Other well-known issue is the lack of permissions on the './persistence` directory that created at contianer creation, and that is used to persist data from InfluxDB and Grafana containers into local disk. To solve this, change permissions with:
+Another well-known issue is the lack of permissions on the `./persistence` directory created at contianer startup, which is used to persist data from InfluxDB and Grafana containers into local disk. To solve this, grant permissions with:
 ```bash
 sudo chmod -R a+rwx persistence
 ```
@@ -166,7 +174,7 @@ SELECT * FROM repositories LIMIT 10;
 ## Future improvements
 - Add asynchronious pagination to fetch more than a 100 elements from the GitHub API, which is the current authorized limit.
 - Alter the retention policy on InfluxDB to keep only the recent records and thus limit the disk space consumption.
-- Improve exception handling.
+- Improve exceptions handling.
 - Add automatic tests.
 
 

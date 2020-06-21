@@ -2,7 +2,7 @@
 Reverse proxy to enable LetsEncrypt SSL encryption. 
 
 ## How to
-1. Add following snippet as environment variables to you docker-compose servies that will serve a port or endpoint:
+1. Add the following snippet as environment variables to you docker-compose services that will serve a port or endpoint:
 ```
 environment:
 ...
