@@ -106,7 +106,7 @@ module.exports = class DataFetcher {
                 console.log(`Database '${this.databaseName}' is now available for storage!'`);
             })
             .catch(err => {
-                console.error(`Error creating database '${this.databaseName}: ${err}`);
+                console.error(`Error creating database '${this.databaseName}': ${err}`);
             });
     }
 
@@ -203,11 +203,16 @@ module.exports = class DataFetcher {
      * @return: None
      */
     store(points) {
-        this.influxdbClient.writeMeasurement(this.databaseMeasurement, points)
-            .then(() => {
-                console.log(`Successfully inserted batch size ${points.length}`);
-            })
-            .catch(err => console.error(err));
+        if (this.isDatabaseExist === true) {
+            this.influxdbClient.writeMeasurement(this.databaseMeasurement, points)
+                .then(() => {
+                    console.log(`Successfully inserted batch size ${points.length}`);
+                })
+                .catch(err => console.error(err));
+        } else {
+            // Re-attempt a DB connection
+            this._initDatabase();
+        }
     }
 
 

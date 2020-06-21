@@ -1,5 +1,5 @@
 {
-  "name": "github-api-playaround",
+  "name": "github-hall-of-fame",
   "version": "1.0.0",
   "description": " Take the GitHub public API (v4, GraphQL) and see what fun and entertaining applications we can build!",
   "main": "src/index.js",
@@ -9,14 +9,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/redouane-dev/github-api-playaround.git"
+    "url": "git+https://github.com/redouane-dev/github-hall-of-fame.git"
   },
   "author": "Redouane Achouri",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/redouane-dev/github-api-playaround/issues"
+    "url": "https://github.com/redouane-dev/github-hall-of-fame/issues"
   },
-  "homepage": "https://github.com/redouane-dev/github-api-playaround#readme",
+  "homepage": "https://github.com/redouane-dev/github-hall-of-fame#readme",
   "dependencies": {
     "@apollo/react-hooks": "^3.1.5",
     "apollo-boost": "^0.4.9",

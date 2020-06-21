@@ -11,22 +11,20 @@ const secret = require('../config/secret')
 
 const PORT = config['default']['port'] || 4000;
 
-//
+// Connect and fetch data from the GraphQL API endpoint
 let d = new DataFetcher(
     config['github-api']['url'],
     secret['github-api']['token'],
     config['database']
 );
 
+// Periodically fetch and store data
 try {
-    // d.query('is:public stars:>1000', 10);
-    // d.paginatedQuery('is:public stars:>1000', 10, 1);
-
-
     setInterval(
-        () => d.query('is:public stars:>1000', 100),
+        () => d.query('is:public stars:>1000', config['default']['pagination-page-size']),
         config['default']['interval-mn'] * 60 * 1000    // Milliseconds
     );
+    // d.paginatedQuery('is:public stars:>1000', 10, 1);
 
 } catch (error) {
     console.error(error);   
@@ -44,7 +42,7 @@ app.get(
     expressPlayground({
         endpoint: config['github-api']['url'],
         headers: {
-            'Authorization': `Bearer ${secret['github-api']['token']}`
+            'Authorization': `Bearer <please insert your token here>`
         }
     }),
 );

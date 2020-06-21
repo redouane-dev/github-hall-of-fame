@@ -2,11 +2,11 @@ version: "3"
 
 services:
   server:
-    container_name: project-github-api-playaround
+    container_name: project-github-hall-of-fame
     build: "."
     restart: on-failure
-    command: >
-      npx nodemon  # For debug mode
+    depends_on:
+      - influxdb
     ports:
       - "4000:4000"
     volumes:
@@ -19,7 +19,7 @@ services:
         max-file: "10"
 
   influxdb:
-    container_name: project-github-api-playaround-influxdb
+    container_name: project-github-hall-of-fame-influxdb
     image: influxdb:1.8.0
     restart: on-failure
     expose:
@@ -36,9 +36,11 @@ services:
         max-file: "10"
 
   grafana:
-    container_name: project-github-api-playaround-grafana
+    container_name: project-github-hall-of-fame-grafana
     image: grafana/grafana:7.0.3
     restart: on-failure
+    depends_on:
+      - influxdb
     expose:
       - "3000"
     volumes:
