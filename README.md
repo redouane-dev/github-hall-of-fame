@@ -1,8 +1,6 @@
 # github-hall-of-fame
 Dashboard to monitor the ranking of the GitHub most popular languages and users.
 
-Dashboard available at [futurice.redouaneachouri.com](https://futurice.redouaneachouri.com/d/w_AGnSZGk/github-hall-of-fame?orgId=1&from=now-24h&to=now).
-
 
 ## Introduction
 
@@ -13,9 +11,6 @@ In this project, we'll be using the v4 GraphQL API to periodically fetch the 100
 - The most popular users
 - The users with most forks across their repositories.
 
-
-#### Quick Access Links
-- Dashboard: [futurice.redouaneachouri.com](https://futurice.redouaneachouri.com/d/w_AGnSZGk/github-hall-of-fame?orgId=1&from=now-24h&to=now)
 
 #### Tech Stack
 - Development: Docker, Node.js, Express, GraphQL Client, GraphQL Playground, InfluxDB, Grafana.
